@@ -1,0 +1,81 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alex",
+      "email": "alex@example.com"
+    },
+    {
+      "id": 2,
+      "name": "Brenda",
+      "email": "brenda@example.com"
+    },
+    {
+      "id": 3,
+      "name": "Joseph",
+      "email": "joseph@example.com"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "CLI Tool",
+      "description": "Project tracker CLI",
+      "due_date": "2026-07-01",
+      "owner": "Alex"
+    },
+    {
+      "id": 2,
+      "title": "Website Redesign",
+      "description": "",
+      "due_date": "2026-08-15",
+      "owner": "Brenda"
+    },
+    {
+      "id": 3,
+      "title": "Summative Lab",
+      "description": "Module 4 CLI project",
+      "due_date": "2026-06-20",
+      "owner": "Joseph"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Implement add-task",
+      "status": "complete",
+      "project": "CLI Tool",
+      "assigned_to": [
+        "Alex",
+        "Brenda"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Write README",
+      "status": "complete",
+      "project": "CLI Tool",
+      "assigned_to": [
+        "Alex"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Push to GitHub",
+      "status": "pending",
+      "project": "Summative Lab",
+      "assigned_to": [
+        "Joseph"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Write README",
+      "status": "in-progress",
+      "project": "Summative Lab",
+      "assigned_to": [
+        "Joseph"
+      ]
+    }
+  ]
+}
