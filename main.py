@@ -1,17 +1,12 @@
 import argparse
-import logging
 import sys
 
 from models import User, Project, Task
-from utils import storage, display
+from utils.storage import save_data, load_data
+from utils import display
 
-logging.basicConfig(
-    level=logging.WARNING,
-    format="%(levelname)s %(name)s: %(message)s",
-)
-logger = logging.getLogger("pm-cli")
 
-def cmd_add_user(args) -> int:
+def cmd_add_user(args):
     if User.find_by_name(args.name):
         display.error(f"User '{args.name}' already exists.")
         return 1
@@ -20,12 +15,12 @@ def cmd_add_user(args) -> int:
     except ValueError as exc:
         display.error(str(exc))
         return 1
-    storage.save_data()
+    save_data()
     display.success(f"Added user: {user}")
     return 0
 
 
-def cmd_list_users(args) -> int:
+def cmd_list_users(args):
     if not User.all:
         display.info("No users yet. Add one with: add-user --name \"Alex\"")
         return 0
@@ -33,7 +28,7 @@ def cmd_list_users(args) -> int:
     return 0
 
 
-def cmd_add_project(args) -> int:
+def cmd_add_project(args):
     user = User.find_by_name(args.user)
     if user is None:
         display.error(f"No user named '{args.user}'. Create them first with add-user.")
@@ -48,12 +43,12 @@ def cmd_add_project(args) -> int:
         display.error(str(exc))
         return 1
     user.add_project(project)
-    storage.save_data()
+    save_data()
     display.success(f"Added project '{project.title}' for {user.name}.")
     return 0
 
 
-def cmd_list_projects(args) -> int:
+def cmd_list_projects(args):
     if args.user:
         user = User.find_by_name(args.user)
         if user is None:
@@ -71,7 +66,7 @@ def cmd_list_projects(args) -> int:
     return 0
 
 
-def cmd_search_projects(args) -> int:
+def cmd_search_projects(args):
     keyword = args.keyword.lower()
     matches = [p for p in Project.all
                if keyword in p.title.lower() or keyword in p.description.lower()]
@@ -82,7 +77,7 @@ def cmd_search_projects(args) -> int:
     return 0
 
 
-def cmd_add_task(args) -> int:
+def cmd_add_task(args):
     project = Project.find_by_title(args.project)
     if project is None:
         display.error(f"No project titled '{args.project}'.")
@@ -100,12 +95,12 @@ def cmd_add_task(args) -> int:
                 display.error(f"No user named '{name}' — skipping assignment.")
                 continue
             task.assign_to(user)
-    storage.save_data()
+    save_data()
     display.success(f"Added task '{task.title}' to project '{project.title}'.")
     return 0
 
 
-def cmd_list_tasks(args) -> int:
+def cmd_list_tasks(args):
     if args.project:
         project = Project.find_by_title(args.project)
         if project is None:
@@ -123,19 +118,21 @@ def cmd_list_tasks(args) -> int:
     return 0
 
 
-def cmd_complete_task(args) -> int:
+def cmd_complete_task(args):
     task = Task.find_by_title(args.title)
     if task is None:
         display.error(f"No task titled '{args.title}'.")
         return 1
     task.complete()
-    storage.save_data()
-    display.success(f"Marked '{task.title}' as complete. "
-                    f"({task.project.progress if task.project else 'no project'})")
+    save_data()
+    if task.project:
+        display.success(f"Marked '{task.title}' as complete. ({task.project.progress})")
+    else:
+        display.success(f"Marked '{task.title}' as complete.")
     return 0
 
 
-def cmd_update_task(args) -> int:
+def cmd_update_task(args):
     task = Task.find_by_title(args.title)
     if task is None:
         display.error(f"No task titled '{args.title}'.")
@@ -148,18 +145,16 @@ def cmd_update_task(args) -> int:
     except ValueError as exc:
         display.error(str(exc))
         return 1
-    storage.save_data()
+    save_data()
     display.success(f"Updated task: {task}")
     return 0
 
 
-def build_parser() -> argparse.ArgumentParser:
+def build_parser():
     parser = argparse.ArgumentParser(
         prog="pm",
         description="A command-line project management tool for teams.",
     )
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Enable debug logging.")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p = sub.add_parser("add-user", help="Create a new user.")
@@ -211,12 +206,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv=None) -> int:
+def main(argv=None):
     parser = build_parser()
     args = parser.parse_args(argv)
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-    storage.load_data()
+    load_data()
     return args.func(args)
 
 
