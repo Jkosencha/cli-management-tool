@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 DATA_FILE = os.path.join(DATA_DIR, "db.json")
 
-
 def save_data(path: str | None = None) -> None:
     path = path or DATA_FILE  
     payload = {
@@ -26,7 +25,6 @@ def save_data(path: str | None = None) -> None:
     except OSError as exc:
         logger.error("Could not write data file %s: %s", path, exc)
         raise
-
 
 def load_data(path: str | None = None) -> None:
     path = path or DATA_FILE  

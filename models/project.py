@@ -2,7 +2,6 @@ from dateutil import parser as date_parser
 
 
 class Project:
-
     _id_counter: int = 1
     all: list["Project"] = []
 

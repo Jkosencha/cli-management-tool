@@ -1,11 +1,6 @@
-
 from models.person import Person
-
-
 class User(Person):
-    
     _id_counter: int = 1
-
     all: list["User"] = []
 
     def __init__(self, name: str, email: str = "", user_id: int | None = None):
@@ -20,23 +15,19 @@ class User(Person):
         User.all.append(self)
 
     def add_project(self, project) -> None:
-        """Attach a Project to this user (one-to-many)."""
         if project not in self.projects:
             self.projects.append(project)
             project.owner = self
 
     @classmethod
     def find_by_name(cls, name: str) -> "User | None":
-        """Case-insensitive lookup of a user by name."""
         name = name.strip().lower()
         return next((u for u in cls.all if u.name.lower() == name), None)
 
     @classmethod
     def reset(cls) -> None:
-
         cls.all = []
         cls._id_counter = 1
-
 
     def to_dict(self) -> dict:
         return {"id": self.id, "name": self.name, "email": self.email}

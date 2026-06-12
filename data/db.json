@@ -2,18 +2,18 @@
   "users": [
     {
       "id": 1,
-      "name": "Alex",
-      "email": "alex@example.com"
+      "name": "Jennifer",
+      "email": "jennifer@gmail.com"
     },
     {
       "id": 2,
-      "name": "Brenda",
-      "email": "brenda@example.com"
+      "name": "Kosencha",
+      "email": "kosencha@gmail.com"
     },
     {
       "id": 3,
-      "name": "Joseph",
-      "email": "joseph@example.com"
+      "name": "Edwin",
+      "email": "edwin@gmail.com"
     }
   ],
   "projects": [

@@ -1,6 +1,4 @@
-
 class Task:
-  
     _id_counter: int = 1
     all: list["Task"] = []
 

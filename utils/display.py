@@ -3,18 +3,14 @@ from rich.table import Table
 
 console = Console()
 
-
 def success(msg: str) -> None:
     console.print(f"[bold green]✔[/] {msg}")
-
 
 def error(msg: str) -> None:
     console.print(f"[bold red]✘[/] {msg}")
 
-
 def info(msg: str) -> None:
     console.print(f"[bold cyan]ℹ[/] {msg}")
-
 
 def users_table(users) -> None:
     table = Table(title="Users")

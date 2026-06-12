@@ -1,12 +1,8 @@
-
 import json
-
 import pytest
-
 import main
 from models import User, Project, Task
 from utils import storage
-
 
 @pytest.fixture(autouse=True)
 def isolated_db(tmp_path, monkeypatch):
@@ -16,7 +12,6 @@ def isolated_db(tmp_path, monkeypatch):
     Project.reset()
     Task.reset()
     yield db
-
 
 class TestStorage:
     def test_save_and_load_round_trip(self, isolated_db):
@@ -39,7 +34,7 @@ class TestStorage:
         assert user in loaded_task.contributors
 
     def test_load_missing_file_starts_empty(self, isolated_db):
-        storage.load_data()  # file does not exist
+        storage.load_data()
         assert User.all == [] and Project.all == [] and Task.all == []
 
     def test_load_corrupted_file_starts_fresh(self, isolated_db):
@@ -52,8 +47,6 @@ class TestStorage:
         storage.save_data()
         payload = json.loads(isolated_db.read_text())
         assert payload["users"][0]["name"] == "Alex"
-
-
 class TestCLI:
     def run(self, *argv):
         return main.main(list(argv))

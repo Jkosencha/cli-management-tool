@@ -1,17 +1,13 @@
-
 import pytest
 
 from models import User, Project, Task
 
-
 @pytest.fixture(autouse=True)
 def clean_registries():
-    """Reset class-level registries before every test."""
     User.reset()
     Project.reset()
     Task.reset()
     yield
-
 
 class TestUser:
     def test_create_user(self):
@@ -46,7 +42,6 @@ class TestUser:
         assert restored.name == "Alex"
         assert restored.id == u.id
 
-
 class TestProject:
     def test_user_project_relationship(self):
         u = User("Alex")
@@ -75,7 +70,6 @@ class TestProject:
         p.add_task(t2)
         t1.complete()
         assert p.progress == "1/2 tasks complete"
-
 
 class TestTask:
     def test_default_status(self):
